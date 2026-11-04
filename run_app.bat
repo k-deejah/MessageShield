@@ -1,0 +1,3 @@
+@echo off
+echo Starting MessageShield Web App...
+python -m streamlit run app.py
