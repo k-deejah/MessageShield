@@ -8,6 +8,7 @@ MessageShield is a machine learning-based spam detection system that classifies 
 ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.0+-orange.svg)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.66+-red.svg)
 ![Accuracy](https://img.shields.io/badge/Accuracy-98.48%25-green.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## ✨ Features
 
@@ -24,8 +25,16 @@ MessageShield is a machine learning-based spam detection system that classifies 
 |--------|-------|
 | **Accuracy** | 98.48% |
 | **Spam Detection Rate** | 91% |
+| **Precision (Spam)** | 98% |
+| **Recall (Spam)** | 91% |
 | **False Positives** | 3 out of 1,115 |
 | **False Negatives** | 14 out of 1,115 |
+
+## 🎯 Demo
+
+Try it yourself! The web interface provides:
+- 🔍 **Spam Detector Tab**: Real-time message classification
+- 📊 **Dataset Overview Tab**: Interactive statistics and visualizations
 
 ## 🚀 Quick Start
 
@@ -38,7 +47,7 @@ MessageShield is a machine learning-based spam detection system that classifies 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/MessageShield.git
+git clone https://github.com/k-deejah/MessageShield.git
 cd MessageShield
 ```
 
@@ -52,36 +61,68 @@ pip install -r requirements.txt
 python src/train_improved.py
 ```
 
-### Usage
+## 💻 Usage
 
-#### Web Interface (Recommended)
+### Web Interface (Recommended)
 
 Launch the interactive web app:
 ```bash
 python -m streamlit run app.py
 ```
 
-Or double-click `run_app.bat` (Windows)
+Or on Windows, double-click `run_app.bat`
 
 The app will open at `http://localhost:8501`
 
-#### Command Line
+**Features:**
+- Enter any SMS message to check if it's spam
+- View confidence scores and probabilities
+- Explore dataset statistics and model performance metrics
+
+### Command Line Interface
 
 Check a single message:
 ```bash
 python src/classify.py "Your message here"
 ```
 
-Example:
+**Examples:**
 ```bash
+# Spam message
 python src/classify.py "Congratulations! You won $1000. Click here now!"
+
+# Legitimate message
+python src/classify.py "Hey, are we still meeting for coffee tomorrow?"
 ```
 
-#### Interactive CLI
+### Interactive CLI
 
-For multiple checks:
+For multiple message checks in one session:
 ```bash
 python src/check_message.py
+```
+
+Type messages one at a time, and type `quit` to exit.
+
+### Python API
+
+Use the model in your own Python scripts:
+```python
+import joblib
+from pathlib import Path
+
+# Load the model
+model = joblib.load("models/spam_model.pkl")
+vectorizer = joblib.load("models/tfidf_vectorizer.pkl")
+
+# Classify a message
+message = "Free entry to win cash prizes!"
+message_vector = vectorizer.transform([message])
+prediction = model.predict(message_vector)[0]
+probabilities = model.predict_proba(message_vector)[0]
+
+print(f"Prediction: {prediction}")
+print(f"Spam probability: {probabilities[1]*100:.2f}%")
 ```
 
 ## 📁 Project Structure
@@ -102,6 +143,7 @@ MessageShield/
 │   └── predict.py             # Batch prediction script
 ├── requirements.txt           # Python dependencies
 ├── run_app.bat               # Windows launcher
+├── LICENSE                   # MIT License
 └── README.md                 # This file
 ```
 
@@ -114,71 +156,104 @@ MessageShield/
 - **Features**: 5,000 most important features
 - **N-grams**: Unigrams and Bigrams (1-2 word phrases)
 - **Preprocessing**: Lowercase conversion, English stop words removal
+- **Alpha Parameter**: 0.1 (tuned for increased sensitivity)
 
 ### Dataset
 
-- **Source**: SMS Spam Collection Dataset
+- **Source**: [SMS Spam Collection Dataset](https://archive.ics.uci.edu/ml/datasets/sms+spam+collection)
 - **Total Messages**: 5,572
   - Legitimate (Ham): 4,825 (86.6%)
   - Spam: 747 (13.4%)
-- **Split**: 80% training (4,457), 20% testing (1,115)
-- **Stratified**: Maintains class distribution in both sets
+- **Training Set**: 4,457 messages (80%)
+- **Test Set**: 1,115 messages (20%)
+- **Split Method**: Stratified to maintain class distribution
 
-### Key Improvements
+### Key Improvements Over Basic Models
 
-1. **Bigram Analysis**: Captures phrases like "click here", "win prize"
-2. **Stop Word Removal**: Filters common words for better signal
-3. **Tuned Alpha Parameter** (0.1): Increased sensitivity to spam indicators
-4. **Optimized Vocabulary**: 5,000 carefully selected features
+1. **Bigram Analysis**: Captures multi-word phrases like "click here", "free prize", "win now"
+2. **Stop Word Removal**: Filters common English words to focus on meaningful content
+3. **Optimized Alpha**: Lower alpha (0.1) increases model sensitivity to spam indicators
+4. **Feature Selection**: 5,000 carefully selected features for optimal balance
+5. **TF-IDF Weighting**: Prioritizes rare, distinctive words over common ones
 
-## 📸 Screenshots
+### Why Naive Bayes?
 
-### Web Interface - Spam Detection
-![Spam Detection](https://via.placeholder.com/800x400?text=Spam+Detection+Interface)
+- **Fast Training & Prediction**: Ideal for real-time applications
+- **Low Resource Requirements**: Works well even with limited data
+- **Probabilistic Output**: Provides confidence scores, not just binary classification
+- **Proven Effectiveness**: Industry standard for text classification tasks
 
-### Dataset Dashboard
-![Dashboard](https://via.placeholder.com/800x400?text=Dataset+Statistics+Dashboard)
+## 📈 Example Predictions
+
+| Message | Prediction | Confidence |
+|---------|-----------|------------|
+| "Congratulations! You won $1000" | SPAM | 99.6% |
+| "Hey, click this link you win 400$" | SPAM | 85.4% |
+| "FREE entry to win cash prizes!" | SPAM | 99.6% |
+| "Hey, are we meeting tomorrow?" | HAM | 99.9% |
+| "Thanks for dinner last night!" | HAM | 98.3% |
 
 ## 🛠️ Development
 
 ### Training a New Model
 
+To retrain the model with custom parameters:
+
 ```bash
 python src/train_improved.py
 ```
 
-This will:
-1. Load the SMS dataset
-2. Preprocess and vectorize text
-3. Train the Naive Bayes classifier
-4. Evaluate performance
-5. Save model to `models/` directory
+This script will:
+1. Load the SMS Spam Collection dataset
+2. Preprocess and vectorize the text using TF-IDF
+3. Train the Multinomial Naive Bayes classifier
+4. Evaluate performance on the test set
+5. Save the trained model and vectorizer to `models/`
 
-### Testing
+### Running Tests
 
-Test the model with sample messages:
+Test the model with predefined sample messages:
 ```bash
 python src/predict.py
 ```
 
-## 📈 Future Improvements
+## 🔮 Future Enhancements
 
-- [ ] Add support for MMS and email spam detection
-- [ ] Implement deep learning models (LSTM, BERT)
-- [ ] Create REST API endpoint
-- [ ] Add multi-language support
-- [ ] Implement real-time learning from user feedback
-- [ ] Mobile app integration
+- [ ] Deep Learning models (LSTM, BERT) for improved accuracy
+- [ ] Multi-language spam detection support
+- [ ] REST API endpoint for integration with other applications
+- [ ] Mobile app (iOS/Android)
+- [ ] Email spam detection extension
+- [ ] Real-time learning from user feedback
+- [ ] Explainable AI features (highlight spam indicators)
+- [ ] Batch processing for large message datasets
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Here's how you can help:
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. **Fork the repository**
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+3. **Make your changes and commit**
+   ```bash
+   git commit -m 'Add some AmazingFeature'
+   ```
+4. **Push to your branch**
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+5. **Open a Pull Request**
+
+### Ideas for Contributions
+- Add support for more languages
+- Implement additional ML algorithms for comparison
+- Improve the UI/UX of the web interface
+- Add unit tests and integration tests
+- Create Docker containerization
+- Add more visualization features
 
 ## 📄 License
 
@@ -186,16 +261,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- SMS Spam Collection Dataset from UCI Machine Learning Repository
-- Scikit-learn for machine learning tools
-- Streamlit for the amazing web framework
+- [SMS Spam Collection Dataset](https://archive.ics.uci.edu/ml/datasets/sms+spam+collection) from UCI Machine Learning Repository
+- [Scikit-learn](https://scikit-learn.org/) for comprehensive machine learning tools
+- [Streamlit](https://streamlit.io/) for the intuitive web framework
+- The open-source community for inspiration and support
 
-## 📧 Contact
+## 📧 Contact & Support
 
-Your Name - [@your_twitter](https://twitter.com/your_twitter)
-
-Project Link: [https://github.com/YOUR_USERNAME/MessageShield](https://github.com/YOUR_USERNAME/MessageShield)
+- **GitHub**: [@k-deejah](https://github.com/k-deejah)
+- **Repository**: [MessageShield](https://github.com/k-deejah/MessageShield)
+- **Issues**: [Report a bug or request a feature](https://github.com/k-deejah/MessageShield/issues)
 
 ---
 
-⭐ Star this repository if you find it helpful!
+⭐ **If you find this project helpful, please consider giving it a star!** ⭐
+
+Made with ❤️ by [k-deejah](https://github.com/k-deejah)
