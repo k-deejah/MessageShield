@@ -10,6 +10,20 @@ MessageShield is a machine learning-based spam detection system that classifies 
 ![Accuracy](https://img.shields.io/badge/Accuracy-98.48%25-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## 🎯 Live Demo
+
+### Spam Detection
+![Spam Detection](screenshots/spam_detection_example.png)
+*MessageShield correctly identifying a spam message with 99.6% confidence*
+
+### Legitimate Message Classification
+![Legitimate Message](screenshots/legitimate_message_example.png)
+*Legitimate message classified as HAM with 99.9% confidence*
+
+### Dataset Dashboard
+![Dataset Dashboard](screenshots/dataset_dashboard.png)
+*Interactive dashboard showing dataset statistics and model performance metrics*
+
 ## ✨ Features
 
 - **High Accuracy**: 98.48% accuracy with 91% spam detection rate
@@ -29,12 +43,6 @@ MessageShield is a machine learning-based spam detection system that classifies 
 | **Recall (Spam)** | 91% |
 | **False Positives** | 3 out of 1,115 |
 | **False Negatives** | 14 out of 1,115 |
-
-## 🎯 Demo
-
-Try it yourself! The web interface provides:
-- 🔍 **Spam Detector Tab**: Real-time message classification
-- 📊 **Dataset Overview Tab**: Interactive statistics and visualizations
 
 ## 🚀 Quick Start
 
@@ -141,9 +149,12 @@ MessageShield/
 │   ├── classify.py            # CLI message classifier
 │   ├── check_message.py       # Interactive checker
 │   └── predict.py             # Batch prediction script
+├── screenshots/               # Application screenshots
 ├── requirements.txt           # Python dependencies
 ├── run_app.bat               # Windows launcher
 ├── LICENSE                   # MIT License
+├── CONTRIBUTING.md           # Contribution guidelines
+├── CODE_OF_CONDUCT.md        # Community standards
 └── README.md                 # This file
 ```
 
@@ -230,30 +241,15 @@ python src/predict.py
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here's how you can help:
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+### Quick Contribution Guide
 
 1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/AmazingFeature
-   ```
-3. **Make your changes and commit**
-   ```bash
-   git commit -m 'Add some AmazingFeature'
-   ```
-4. **Push to your branch**
-   ```bash
-   git push origin feature/AmazingFeature
-   ```
+2. **Create a feature branch**: `git checkout -b feature/AmazingFeature`
+3. **Make your changes and commit**: `git commit -m 'Add some AmazingFeature'`
+4. **Push to your branch**: `git push origin feature/AmazingFeature`
 5. **Open a Pull Request**
-
-### Ideas for Contributions
-- Add support for more languages
-- Implement additional ML algorithms for comparison
-- Improve the UI/UX of the web interface
-- Add unit tests and integration tests
-- Create Docker containerization
-- Add more visualization features
 
 ## 📄 License
 
@@ -272,8 +268,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Repository**: [MessageShield](https://github.com/k-deejah/MessageShield)
 - **Issues**: [Report a bug or request a feature](https://github.com/k-deejah/MessageShield/issues)
 
+## 🌟 Show Your Support
+
+If you find this project helpful, please consider:
+- ⭐ Starring the repository
+- 🔄 Sharing with others
+- 🐛 Reporting bugs
+- 💡 Suggesting new features
+- 🤝 Contributing code
+
 ---
 
-⭐ **If you find this project helpful, please consider giving it a star!** ⭐
-
-Made with ❤️ by [k-deejah](https://github.com/k-deejah)
+**Built with ❤️ by [@k-deejah](https://github.com/k-deejah)**
